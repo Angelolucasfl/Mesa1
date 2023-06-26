@@ -24,4 +24,18 @@ def ServiceView(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+@api_view(['GET'])
+def ServiceDetailView(request, pk):
+
+    try:
+        service = Service.objects.get(id=pk)
+    except service.DoesNotExist:
+        return Response(status=404)
+
+    if request.method == 'GET':
+        serializer = ServiceSerializer(service)
+        return Response(serializer.data)
+        
 
