@@ -1,6 +1,5 @@
 from django.db import models
-import decimal
-
+from decimal import Decimal
 
 class Contractor(models.Model):
     name = models.CharField(max_length=255)
@@ -42,7 +41,6 @@ class Employee(models.Model):
         return self.name
 
 
-
 class ContractorRating(models.Model):
     RATING_CHOICES = (
         (1, '1'),
@@ -77,10 +75,12 @@ class EmployeeRating(models.Model):
         return f"Employee Rating {self.rating} from {self.employee.name} to {self.contractor.name}"
 
 
+from django.db import models
+
 class Service(models.Model):
-    title= models.CharField(max_length=255) 
-    description= models.TextField()
-    hours = models.DecimalField(max_digits=5, decimal_places=2)
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    hours = models.TimeField()
     hours_value = models.DecimalField(max_digits=8, decimal_places=2)
     contractor = models.ForeignKey(Contractor, on_delete=models.CASCADE)
     enlisted = models.ManyToManyField(Employee, blank=True)
@@ -88,11 +88,14 @@ class Service(models.Model):
     updated_at = models.DateTimeField(auto_now_add=True)
 
     def calc_value(self):
-        valor_sem_taxa = self.hours * self.hours_value
-        taxa = valor_sem_taxa * decimal.Decimal('0.1')
-        valor_total = valor_sem_taxa + taxa
-        return valor_total
-    
+        if self.hours:
+            total_minutes = self.hours.hour * 60 + self.hours.minute
+            valor_sem_taxa = total_minutes * self.hours_value / 60
+            taxa = valor_sem_taxa * Decimal('0.1')
+            valor_total = valor_sem_taxa + taxa
+            return valor_total
+        return 0
+
     def __str__(self):
         return self.title
     
