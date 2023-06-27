@@ -5,3 +5,4 @@ urlpatterns = [
     path('services/', ServiceView),
     path('service-detail/<int:pk>/', ServiceDetailView),
 ]
+

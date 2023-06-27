@@ -38,4 +38,3 @@ def ServiceDetailView(request, pk):
         serializer = ServiceSerializer(service)
         return Response(serializer.data)
         
-

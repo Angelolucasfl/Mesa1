@@ -4,7 +4,6 @@ from decimal import Decimal
 class Contractor(models.Model):
     name = models.CharField(max_length=255)
     bio = models.TextField(null=True)
-    address = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
 
@@ -73,9 +72,7 @@ class EmployeeRating(models.Model):
 
     def __str__(self):
         return f"Employee Rating {self.rating} from {self.employee.name} to {self.contractor.name}"
-
-
-from django.db import models
+    
 
 class Service(models.Model):
     title = models.CharField(max_length=255)
@@ -86,6 +83,10 @@ class Service(models.Model):
     enlisted = models.ManyToManyField(Employee, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
+    address = models.CharField(max_length=255, default='N/A')
+    service_date = models.DateField()
+    start_time = models.TimeField(default='00:00')
+    image = models.ImageField(upload_to='media/service_images/', default='media/service_images/default.jpg')
 
     def calc_value(self):
         if self.hours:
@@ -98,4 +99,12 @@ class Service(models.Model):
 
     def __str__(self):
         return self.title
+
+
+
+
+
+
+
+
     
