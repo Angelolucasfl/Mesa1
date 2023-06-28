@@ -26,9 +26,8 @@ def ServiceView(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
-@api_view(['GET'])
+@api_view(['GET', 'PUT', 'DELETE'])
 def ServiceDetailView(request, pk):
-
     try:
         service = Service.objects.get(id=pk)
     except service.DoesNotExist:
@@ -37,4 +36,16 @@ def ServiceDetailView(request, pk):
     if request.method == 'GET':
         serializer = ServiceSerializer(service)
         return Response(serializer.data)
+    
+    elif request.method == 'PUT':
+        serializer = ServiceSerializer(service, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+    
+    elif request.method == 'DELETE':
+        service.delete()
+        return Response(status=204)
         
