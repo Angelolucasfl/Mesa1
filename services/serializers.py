@@ -28,7 +28,7 @@ class EmployeeRatingSerializer(serializers.ModelSerializer):
 class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Service
-        fields = ['title', 'description', 'hours', 'hours_value', 'contractor', 'enlisted', 'created_at', 'updated_at']
+        fields = ['id', 'title', 'description', 'hours', 'hours_value', 'contractor', 'enlisted', 'created_at', 'updated_at']
 
 
 
