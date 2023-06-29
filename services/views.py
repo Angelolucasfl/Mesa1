@@ -36,16 +36,22 @@ def ServiceDetailView(request, pk):
     if request.method == 'GET':
         serializer = ServiceSerializer(service)
         return Response(serializer.data)
-    
+
     elif request.method == 'PUT':
         serializer = ServiceSerializer(service, data=request.data)
 
         if serializer.is_valid():
-            serializer.save()
+            enlisted_ids = request.data.get('enlisted', [])  # Obtém a lista de IDs dos funcionários alistados
+            enlisted_employees = Employee.objects.filter(id__in=enlisted_ids)  # Obtém os objetos dos funcionários alistados
+
+            serializer.save(enlisted=enlisted_employees)  # Salva o serviço e associa os funcionários alistados
+
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
-    
+
     elif request.method == 'DELETE':
         service.delete()
         return Response(status=204)
+
+    
         
