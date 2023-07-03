@@ -10,7 +10,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
 class ContractorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contractor
-        fields = ['name', 'bio', 'address', 'created_at', 'updated_at']
+        fields = ['name', 'bio', 'created_at', 'updated_at']
 
 
 class ContractorRatingSerializer(serializers.ModelSerializer):
