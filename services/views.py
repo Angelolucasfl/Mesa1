@@ -135,3 +135,36 @@ def EmployeeDetailView(request, pk):
     elif request.method == 'DELETE':
         employee.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+@api_view(['GET', 'POST'])
+def ContractorRatingView(request):
+    if request.method == 'GET':
+        ratings = ContractorRating.objects.all()
+        serializer = ContractorRatingSerializer(ratings, many=True)
+        return Response(serializer.data)
+    
+    elif request.method == 'POST':
+        serializer = ContractorRatingSerializer(data=request.data)
+    
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'POST'])
+def EmployeeRatingView(request):
+    if request.method == 'GET':
+        ratings = EmployeeRating.objects.all()
+        serializer = EmployeeRatingSerializer(ratings, many=True)
+        return Response(serializer.data)
+    
+    elif request.method == 'POST':
+        serializer = EmployeeRatingSerializer(data=request.data)
+    
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

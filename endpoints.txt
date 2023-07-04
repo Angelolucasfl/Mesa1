@@ -1,0 +1,11 @@
+api/contractors/
+api/contractor-detail/<pk>/
+
+api/employees/
+api/employee-detail/<pk>/
+
+api/rating-employee/
+api/rating-contractor/
+
+api/services/
+api/service-detail/<pk>/
