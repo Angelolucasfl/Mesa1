@@ -74,13 +74,15 @@ class EmployeeRating(models.Model):
         return f"Employee Rating {self.rating} from {self.employee.name} to {self.contractor.name}"
     
 
+# models.py
 class Service(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     hours = models.TimeField()
     hours_value = models.DecimalField(max_digits=8, decimal_places=2)
     contractor = models.ForeignKey(Contractor, on_delete=models.CASCADE)
-    enlisted = models.ManyToManyField(Employee, blank=True)
+    enlisted = models.ManyToManyField(Employee, related_name='enlisted_services', blank=True)
+    chosen_employee = models.ForeignKey(Employee, related_name='chosen_services', blank=True, null=True, on_delete=models.SET_NULL)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     address = models.CharField(max_length=255, default='N/A')

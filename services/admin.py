@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django import forms
 from .models import Employee, Contractor, ContractorRating, EmployeeRating, Service
 
 class ContractorAdmin(admin.ModelAdmin):
@@ -28,8 +29,22 @@ class EmployeeRatingAdmin(admin.ModelAdmin):
     list_display = ['id', 'employee', 'rating']
 
 
+class ServiceForm(forms.ModelForm):
+    chosen_employee = forms.ModelChoiceField(queryset=None, required=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        enlisted_employees = self.instance.enlisted.all()
+        self.fields['chosen_employee'].queryset = enlisted_employees
+
+    class Meta:
+        model = Service
+        fields = '__all__'
+
+
 class ServiceAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'display_calc_value']
+    form = ServiceForm
 
     def display_calc_value(self, obj):
         return obj.calc_value()

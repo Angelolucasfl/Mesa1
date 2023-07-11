@@ -30,8 +30,8 @@ def ServiceView(request):
 def ServiceDetailView(request, pk):
     try:
         service = Service.objects.get(id=pk)
-    except service.DoesNotExist:
-        return Response(status=404)
+    except Service.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
         serializer = ServiceSerializer(service)
@@ -41,17 +41,25 @@ def ServiceDetailView(request, pk):
         serializer = ServiceSerializer(service, data=request.data)
 
         if serializer.is_valid():
-            enlisted_ids = request.data.get('enlisted', [])  # Obtém a lista de IDs dos funcionários alistados
-            enlisted_employees = Employee.objects.filter(id__in=enlisted_ids)  # Obtém os objetos dos funcionários alistados
+            enlisted_ids = request.data.get('enlisted', [])
+            chosen_employee_id = request.data.get('chosen_employee')
 
-            serializer.save(enlisted=enlisted_employees)  # Salva o serviço e associa os funcionários alistados
+            # Verifica se o chosen_employee é um employee alistado
+            if chosen_employee_id and chosen_employee_id not in enlisted_ids:
+                return Response({'error': 'Chosen employee must be enlisted.'}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Atualiza os funcionários alistados e o chosen_employee
+            enlisted_employees = Employee.objects.filter(id__in=enlisted_ids)
+            service.enlisted.set(enlisted_employees)
+            service.chosen_employee_id = chosen_employee_id
+            service.save()
 
             return Response(serializer.data)
-        return Response(serializer.errors, status=400)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
         service.delete()
-        return Response(status=204)
+        return Response(status=status.HTTP_204_NO_CONTENT)
     
 
 @api_view(['GET', 'POST'])
