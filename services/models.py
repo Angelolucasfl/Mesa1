@@ -4,6 +4,7 @@ from decimal import Decimal
 class Contractor(models.Model):
     name = models.CharField(max_length=255)
     bio = models.TextField(null=True)
+    email = models.EmailField(unique=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
 
@@ -23,6 +24,7 @@ class Contractor(models.Model):
 class Employee(models.Model):
     name = models.CharField(max_length=255) 
     bio = models.TextField(null=True)
+    email = models.EmailField(unique=True, blank=True)
     available = models.BooleanField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)

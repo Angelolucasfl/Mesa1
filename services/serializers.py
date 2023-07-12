@@ -4,13 +4,13 @@ from . models import Employee, Contractor, ContractorRating, EmployeeRating, Ser
 class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
-        fields = ['name', 'bio', 'available', 'created_at', 'updated_at']
+        fields = ['id', 'name', 'bio', 'available', 'created_at', 'updated_at']
 
 
 class ContractorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contractor
-        fields = ['name', 'bio', 'created_at', 'updated_at']
+        fields = ['id', 'name', 'bio', 'created_at', 'updated_at']
 
 
 class ContractorRatingSerializer(serializers.ModelSerializer):
