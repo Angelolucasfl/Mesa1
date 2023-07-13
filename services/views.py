@@ -4,7 +4,6 @@ from . serializers import ServiceSerializer, ContractorRatingSerializer, Employe
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.views import APIView
 
 
 @api_view(['GET', 'POST'])
@@ -176,3 +175,15 @@ def EmployeeRatingView(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
     
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['GET'])
+def check_email(request):
+    email = request.GET.get('email', None)  
+
+    if email:
+        employee_exists = Employee.objects.filter(email=email).exists()  # Verifica se o email já está cadastrado para um Employee
+        contractor_exists = Contractor.objects.filter(email=email).exists()  # Verifica se o email já está cadastrado para um Contractor
+
+        return Response({'employee_exists': employee_exists, 'contractor_exists': contractor_exists})
+    else:
+        return Response({'error': 'Email parameter is required'}, status=400)
