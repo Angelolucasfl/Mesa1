@@ -181,8 +181,8 @@ def check_email(request):
     email = request.GET.get('email', None)  
 
     if email:
-        employee_exists = Employee.objects.filter(email=email).exists()  # Verifica se o email já está cadastrado para um Employee
-        contractor_exists = Contractor.objects.filter(email=email).exists()  # Verifica se o email já está cadastrado para um Contractor
+        employee_exists = Employee.objects.filter(email=email).exists()  
+        contractor_exists = Contractor.objects.filter(email=email).exists() 
 
         return Response({'employee_exists': employee_exists, 'contractor_exists': contractor_exists})
     else:
